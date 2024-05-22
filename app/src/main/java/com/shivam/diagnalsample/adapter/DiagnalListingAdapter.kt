@@ -7,10 +7,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.shivam.diagnalsample.R
 import com.shivam.diagnalsample.databinding.ItemGridListingBinding
-import com.shivam.diagnalsample.model.ContentItemModel
+import com.shivam.diagnalsample.model.ContentModel
 
 class DiagnalListingAdapter(val onGridItemClicked: () -> Unit) :
-    ListAdapter<ContentItemModel, DiagnalListingGridItemViewHolder>(ContentItemModel.ContentItemDiffUtil) {
+    ListAdapter<ContentModel, DiagnalListingGridItemViewHolder>(ContentModel.ContentItemDiffUtil) {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -34,7 +34,7 @@ class DiagnalListingGridItemViewHolder(
     val onGridItemClicked: () -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun onBind(item: ContentItemModel) {
+    fun onBind(item: ContentModel) {
         binding.ivPoster.setImageDrawable(
             ContextCompat.getDrawable(
                 binding.root.context,

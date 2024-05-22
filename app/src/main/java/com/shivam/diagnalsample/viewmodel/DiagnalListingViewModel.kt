@@ -1,57 +1,37 @@
 package com.shivam.diagnalsample.viewmodel
 
+import android.content.res.Resources
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.shivam.diagnalsample.model.ContentItemModel
+import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
+import com.shivam.diagnalsample.R
+import com.shivam.diagnalsample.model.PageContentModel
+import com.shivam.diagnalsample.model.PageModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 
-class DiagnalListingViewModel : ViewModel() {
+@HiltViewModel
+class DiagnalListingViewModel() : ViewModel() {
 
-    val listOfMovies: ArrayList<ContentItemModel> = arrayListOf()
+//    @Inject
+//    lateinit var gson:Gson
 
-    init {
-        populateList()
-    }
+    private val _diagnalGridLiveData: MutableLiveData<PageContentModel?> = MutableLiveData()
+    val diagnalGridLiveData: LiveData<PageContentModel?>
+        get() = _diagnalGridLiveData
 
-    private fun populateList() {
-        listOfMovies.add(ContentItemModel(name = "Family Pot", posterImage = "poster9.jpg"))
-        listOfMovies.add(ContentItemModel(name = "Family Pot", posterImage = "poster8.jpg"))
-        listOfMovies.add(ContentItemModel(name = "Rear window", posterImage = "poster7.jpg"))
-        listOfMovies.add(ContentItemModel(name = "The Birds", posterImage = "poster9.jpg"))
-        listOfMovies.add(ContentItemModel(name = "Rear window", posterImage = "poster9.jpg"))
-        listOfMovies.add(ContentItemModel(name = "The birds", posterImage = "poster8.jpg"))
-        listOfMovies.add(ContentItemModel(name = "Rear window", posterImage = "poster7.jpg"))
-        listOfMovies.add(ContentItemModel(name = "Rear window", posterImage = "poster9.jpg"))
-        listOfMovies.add(ContentItemModel(name = "Family Pot", posterImage = "poster9.jpg"))
-        listOfMovies.add(ContentItemModel(name = "Family Pot", posterImage = "poster8.jpg"))
-        listOfMovies.add(ContentItemModel(name = "Rear window", posterImage = "poster7.jpg"))
-        listOfMovies.add(ContentItemModel(name = "The Birds", posterImage = "poster9.jpg"))
-        listOfMovies.add(ContentItemModel(name = "Rear window", posterImage = "poster9.jpg"))
-        listOfMovies.add(ContentItemModel(name = "The birds", posterImage = "poster8.jpg"))
-        listOfMovies.add(ContentItemModel(name = "Rear window", posterImage = "poster7.jpg"))
-        listOfMovies.add(ContentItemModel(name = "Rear window", posterImage = "poster9.jpg"))
-        listOfMovies.add(ContentItemModel(name = "Family Pot", posterImage = "poster9.jpg"))
-        listOfMovies.add(ContentItemModel(name = "Family Pot", posterImage = "poster8.jpg"))
-        listOfMovies.add(ContentItemModel(name = "Rear window", posterImage = "poster7.jpg"))
-        listOfMovies.add(ContentItemModel(name = "The Birds", posterImage = "poster9.jpg"))
-        listOfMovies.add(ContentItemModel(name = "Rear window", posterImage = "poster9.jpg"))
-        listOfMovies.add(ContentItemModel(name = "The birds", posterImage = "poster8.jpg"))
-        listOfMovies.add(ContentItemModel(name = "Rear window", posterImage = "poster7.jpg"))
-        listOfMovies.add(ContentItemModel(name = "Rear window", posterImage = "poster9.jpg"))
-        listOfMovies.add(ContentItemModel(name = "Family Pot", posterImage = "poster9.jpg"))
-        listOfMovies.add(ContentItemModel(name = "Family Pot", posterImage = "poster8.jpg"))
-        listOfMovies.add(ContentItemModel(name = "Rear window", posterImage = "poster7.jpg"))
-        listOfMovies.add(ContentItemModel(name = "The Birds", posterImage = "poster9.jpg"))
-        listOfMovies.add(ContentItemModel(name = "Rear window", posterImage = "poster9.jpg"))
-        listOfMovies.add(ContentItemModel(name = "The birds", posterImage = "poster8.jpg"))
-        listOfMovies.add(ContentItemModel(name = "Rear window", posterImage = "poster7.jpg"))
-        listOfMovies.add(ContentItemModel(name = "Rear window", posterImage = "poster9.jpg"))
-        listOfMovies.add(ContentItemModel(name = "Family Pot", posterImage = "poster9.jpg"))
-        listOfMovies.add(ContentItemModel(name = "Family Pot", posterImage = "poster8.jpg"))
-        listOfMovies.add(ContentItemModel(name = "Rear window", posterImage = "poster7.jpg"))
-        listOfMovies.add(ContentItemModel(name = "The Birds", posterImage = "poster9.jpg"))
-        listOfMovies.add(ContentItemModel(name = "Rear window", posterImage = "poster9.jpg"))
-        listOfMovies.add(ContentItemModel(name = "The birds", posterImage = "poster8.jpg"))
-        listOfMovies.add(ContentItemModel(name = "Rear window", posterImage = "poster7.jpg"))
-        listOfMovies.add(ContentItemModel(name = "Rear window", posterImage = "poster9.jpg"))
+    fun fetchData(resources: Resources) {
+        viewModelScope.launch {
+            val jsonTextFromFile = resources.openRawResource(R.raw.content_listing_page_page1)
+                .bufferedReader().use { it.readText() }
+
+            val pageDataFromJson = Gson().fromJson(jsonTextFromFile, PageModel::class.java)
+            Log.d("shivam", "fetchData: text = ${pageDataFromJson.page?.title}")
+            _diagnalGridLiveData.postValue(pageDataFromJson.page)
+        }
     }
 
 }
