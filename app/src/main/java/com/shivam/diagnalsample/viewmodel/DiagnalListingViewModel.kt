@@ -1,23 +1,26 @@
 package com.shivam.diagnalsample.viewmodel
 
 import android.content.res.Resources
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
 import com.shivam.diagnalsample.R
 import com.shivam.diagnalsample.model.PageContentModel
-import com.shivam.diagnalsample.model.PageModel
+import com.shivam.diagnalsample.repo.DiagnalListingRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 
 @HiltViewModel
 class DiagnalListingViewModel() : ViewModel() {
 
-//    @Inject
-//    lateinit var gson:Gson
+    private var repository = DiagnalListingRepository()
+
+    var mIsLoading = false
+    var mIsLastPage = false
+    val PAGE_START = 1
+    var currentPage = PAGE_START
+    var LIST_ITEM_PER_PAGE = 20
 
     private val _diagnalGridLiveData: MutableLiveData<PageContentModel?> = MutableLiveData()
     val diagnalGridLiveData: LiveData<PageContentModel?>
@@ -25,13 +28,21 @@ class DiagnalListingViewModel() : ViewModel() {
 
     fun fetchData(resources: Resources) {
         viewModelScope.launch {
-            val jsonTextFromFile = resources.openRawResource(R.raw.content_listing_page_page1)
-                .bufferedReader().use { it.readText() }
-
-            val pageDataFromJson = Gson().fromJson(jsonTextFromFile, PageModel::class.java)
-            Log.d("shivam", "fetchData: text = ${pageDataFromJson.page?.title}")
+            mIsLoading = false
+            val pageDataFromJson = repository.fetchData(resources, getCurrentPageId())
             _diagnalGridLiveData.postValue(pageDataFromJson.page)
+            val content = pageDataFromJson.page?.contentItem?.content ?: return@launch
+            if (content.size < LIST_ITEM_PER_PAGE) {
+                mIsLastPage = true
+            }
         }
     }
 
+    private fun getCurrentPageId(): Int {
+        return when (currentPage) {
+            1 -> R.raw.content_listing_page_page1
+            2 -> R.raw.content_listing_page_page2
+            else -> R.raw.content_listing_page_page3
+        }
+    }
 }

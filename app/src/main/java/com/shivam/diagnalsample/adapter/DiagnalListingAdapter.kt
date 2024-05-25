@@ -2,15 +2,16 @@ package com.shivam.diagnalsample.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.shivam.diagnalsample.R
 import com.shivam.diagnalsample.databinding.ItemGridListingBinding
 import com.shivam.diagnalsample.model.ContentModel
+import com.shivam.diagnalsample.util.PosterImageMappingUtil
 
-class DiagnalListingAdapter(val onGridItemClicked: () -> Unit) :
-    ListAdapter<ContentModel, DiagnalListingGridItemViewHolder>(ContentModel.ContentItemDiffUtil) {
+class DiagnalListingAdapter(
+    val movieList: ArrayList<ContentModel>,
+    val onGridItemClicked: () -> Unit
+) :
+    RecyclerView.Adapter<DiagnalListingGridItemViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -20,12 +21,12 @@ class DiagnalListingAdapter(val onGridItemClicked: () -> Unit) :
         return DiagnalListingGridItemViewHolder(binding, onGridItemClicked)
     }
 
-    override fun getItemCount(): Int {
-        return currentList.size
+    override fun onBindViewHolder(holder: DiagnalListingGridItemViewHolder, position: Int) {
+        movieList[position].let { holder.onBind(item = it) }
     }
 
-    override fun onBindViewHolder(holder: DiagnalListingGridItemViewHolder, position: Int) {
-        holder.onBind(item = getItem(position))
+    override fun getItemCount(): Int {
+        return movieList.size
     }
 }
 
@@ -35,12 +36,24 @@ class DiagnalListingGridItemViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun onBind(item: ContentModel) {
-        binding.ivPoster.setImageDrawable(
-            ContextCompat.getDrawable(
-                binding.root.context,
-                R.drawable.poster2
-            )
-        )
+
+        PosterImageMappingUtil.getPosterDrawable(context = binding.root.context, item.posterImage)
+            ?.let {
+                binding.ivPoster.setImageDrawable(it)
+            }
+
+//        posterDrawable?.let {
+//            binding.ivPoster.setImageDrawable(
+////                posterDrawable
+//
+//
+////            ContextCompat.getDrawable(
+////                binding.root.context,
+////                R.drawable.poster2
+////            )
+//            )
+//        }
+
         binding.tvTitle.text = item.name
 
         binding.clRoot.setOnClickListener {

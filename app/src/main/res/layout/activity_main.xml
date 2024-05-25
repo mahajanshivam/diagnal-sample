@@ -14,12 +14,13 @@
         <FrameLayout
             android:id="@+id/flLayout"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="?android:attr/actionBarSize"
             android:background="@drawable/background_gradient_searchbar"
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
+                android:background="@color/transparent"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:elevation="4dp"
@@ -49,9 +50,8 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listingRecyclerView"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginHorizontal="16dp"
             android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -60,6 +60,8 @@
             app:layout_constraintTop_toBottomOf="@id/flLayout"
             tools:itemCount="20"
             app:spanCount="3"
+            android:clipToPadding="false"
+            android:paddingBottom="80dp"
             tools:listitem="@layout/item_grid_listing"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

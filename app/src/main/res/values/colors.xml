@@ -5,4 +5,5 @@
     <color name="black_alpha_50">#80000000</color>
     <color name="background_page">#191919</color>
     <color name="red">#FF0000</color>
+    <color name="transparent">#00000000</color>
 </resources>

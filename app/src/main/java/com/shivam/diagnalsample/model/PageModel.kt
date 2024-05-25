@@ -12,7 +12,7 @@ data class PageContentModel(
     @SerializedName("total-content-items") val totalContentItems: String? = null,
     @SerializedName("page-num") val pageNum: String? = null,
     @SerializedName("page-size") val pageSize: String? = null,
-    @SerializedName("content-items") val contentItemModel: ContentItemsModel? = null,
+    @SerializedName("content-items") val contentItem: ContentItemsModel? = null,
 )
 
 data class ContentItemsModel(
@@ -20,8 +20,8 @@ data class ContentItemsModel(
 )
 
 data class ContentModel(
-    val name: String,
-    val posterImage: String,
+    @SerializedName("name") val name: String,
+    @SerializedName("poster-image") val posterImage: String,
 ) {
     var posterImageDrawableRes: Int = 0
 

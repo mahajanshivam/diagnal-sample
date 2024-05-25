@@ -51,7 +51,6 @@ dependencies {
     implementation libs.androidx.lifecycle.runtime.ktx
 
     implementation "com.google.dagger:hilt-android:$hilt_version"
-//    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
 
     testImplementation libs.junit
     androidTestImplementation libs.androidx.junit

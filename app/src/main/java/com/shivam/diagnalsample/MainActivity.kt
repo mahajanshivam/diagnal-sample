@@ -13,11 +13,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.shivam.diagnalsample.adapter.DiagnalListingAdapter
 import com.shivam.diagnalsample.databinding.ActivityMainBinding
 import com.shivam.diagnalsample.model.ContentModel
+import com.shivam.diagnalsample.paging.PaginationScrollListener
+import com.shivam.diagnalsample.util.GridSpacingItemDecoration
 import com.shivam.diagnalsample.viewmodel.DiagnalListingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,16 +27,17 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var diagnalListingAdapter: DiagnalListingAdapter
-//    private lateinit var viewModel: DiagnalListingViewModel
+
+    //    private lateinit var viewModel: DiagnalListingViewModel
     private val viewModel: DiagnalListingViewModel by viewModels()
     private lateinit var gridLayoutManager: GridLayoutManager
-    private var gridDataList: ArrayList<ContentModel?> = arrayListOf()
+    private var gridDataList: ArrayList<ContentModel> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 //        viewModel = ViewModelProvider(this)[DiagnalListingViewModel::class.java]
-        diagnalListingAdapter = DiagnalListingAdapter(::onGridItemClicked)
+        diagnalListingAdapter = DiagnalListingAdapter(gridDataList, ::onGridItemClicked)
 
         initUI()
         subscribeUI()
@@ -47,22 +49,42 @@ class MainActivity : AppCompatActivity() {
 
         gridLayoutManager =
             GridLayoutManager(this@MainActivity, resources.getInteger(R.integer.grid_column_count))
-        binding.listingRecyclerView.run {
+
+        binding.listingRecyclerView.apply {
             layoutManager = gridLayoutManager
             adapter = diagnalListingAdapter
+            addItemDecoration(GridSpacingItemDecoration(resources.getInteger(R.integer.grid_column_count)))
         }
 
         viewModel.fetchData(resources)
+
+        binding.listingRecyclerView.setOnScrollListener(object :
+            PaginationScrollListener(gridLayoutManager) {
+
+            override val isLastPage: Boolean
+                get() = viewModel.mIsLastPage
+            override val isLoading: Boolean
+                get() = viewModel.mIsLoading
+
+            override fun loadMoreItems() {
+                viewModel.mIsLoading = true
+                viewModel.currentPage++
+                viewModel.fetchData(resources)
+            }
+        })
     }
 
     private fun subscribeUI() {
         viewModel.diagnalGridLiveData.observe(this@MainActivity) { page ->
             binding.toolbar.title = page?.title
 
-            page?.contentItemModel?.content?.forEach {
-                gridDataList.add(it)
+            page?.contentItem?.content?.forEach {
+                gridDataList.add(it ?: ContentModel("", ""))
             }
-            diagnalListingAdapter.submitList(gridDataList)
+            diagnalListingAdapter.notifyItemRangeInserted(
+                (viewModel.currentPage - 1) * (viewModel.LIST_ITEM_PER_PAGE),
+                (viewModel.currentPage * viewModel.LIST_ITEM_PER_PAGE) - 1
+            )
         }
     }
 
