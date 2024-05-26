@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class DiagnalListingViewModel() : ViewModel() {
 
+    var searchQuery: String = ""
     private var repository = DiagnalListingRepository()
 
     var mIsLoading = false
@@ -44,5 +45,11 @@ class DiagnalListingViewModel() : ViewModel() {
             2 -> R.raw.content_listing_page_page2
             else -> R.raw.content_listing_page_page3
         }
+    }
+
+    fun resetPagination() {
+        mIsLoading = false
+        mIsLastPage = false
+        currentPage = PAGE_START
     }
 }
