@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -151,12 +152,17 @@ class MainActivity : AppCompatActivity() {
             viewModel.searchQuery = query
             if (query.length >= 3) {
                 // do filtering logic here
-//                binding.listingRecyclerView.clearOnScrollListeners()
                 viewModel.resetPagination()
                 listForRecycler.clear()
                 diagnalListingAdapter.notifyDataSetChanged()
                 listForRecycler.addAll(getFilteredItemsFromMainList(query))
                 diagnalListingAdapter.notifyDataSetChanged()
+            } else {
+                Toast.makeText(
+                    this@MainActivity,
+                    resources.getString(R.string.enter_more_characters_search),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
             Log.d("shivam", "Search query was: $query")
         }

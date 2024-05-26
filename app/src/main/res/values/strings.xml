@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Diagnal Sample</string>
     <string name="search_movies">Search movies…</string>
+    <string name="enter_more_characters_search">Enter 3 or more characters to search</string>
 </resources>
