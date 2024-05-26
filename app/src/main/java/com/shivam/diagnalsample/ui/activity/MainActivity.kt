@@ -1,4 +1,4 @@
-package com.shivam.diagnalsample
+package com.shivam.diagnalsample.ui.activity
 
 import android.app.SearchManager
 import android.content.ComponentName
@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.MenuItemCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
+import com.shivam.diagnalsample.R
 import com.shivam.diagnalsample.adapter.DiagnalListingAdapter
 import com.shivam.diagnalsample.databinding.ActivityMainBinding
 import com.shivam.diagnalsample.model.ContentModel
@@ -34,6 +35,7 @@ class MainActivity : AppCompatActivity() {
     //    private lateinit var viewModel: DiagnalListingViewModel
     private val viewModel: DiagnalListingViewModel by viewModels()
     private lateinit var gridLayoutManager: GridLayoutManager
+    private lateinit var gridSpacingItemDecoration: GridSpacingItemDecoration
     private var mainDataList: ArrayList<ContentModel> = arrayListOf()
     private var listForRecycler: ArrayList<ContentModel> = arrayListOf()
 
@@ -68,7 +70,8 @@ class MainActivity : AppCompatActivity() {
         binding.listingRecyclerView.apply {
             layoutManager = gridLayoutManager
             adapter = diagnalListingAdapter
-            addItemDecoration(GridSpacingItemDecoration(resources.getInteger(R.integer.grid_column_count)))
+            gridSpacingItemDecoration = GridSpacingItemDecoration(resources)
+            addItemDecoration(gridSpacingItemDecoration)
         }
 
         viewModel.fetchData(resources)
@@ -172,11 +175,12 @@ class MainActivity : AppCompatActivity() {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         gridLayoutManager.spanCount = resources.getInteger(R.integer.grid_column_count)
+        binding.listingRecyclerView.removeItemDecoration(gridSpacingItemDecoration)
+        gridSpacingItemDecoration = GridSpacingItemDecoration(resources)
+        binding.listingRecyclerView.addItemDecoration(gridSpacingItemDecoration)
     }
 
     private fun onGridItemClicked() {
         // grid item click action here
     }
-
-
 }

@@ -9,12 +9,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/background_page"
-        tools:context=".MainActivity">
+        tools:context=".ui.activity.MainActivity">
 
         <FrameLayout
             android:id="@+id/flLayout"
             android:layout_width="match_parent"
-            android:layout_height="?android:attr/actionBarSize"
+            android:layout_height="wrap_content"
             android:background="@drawable/background_gradient_searchbar"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -22,7 +22,7 @@
                 android:id="@+id/toolbar"
                 android:background="@color/transparent"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="72dp"
                 android:elevation="4dp"
                 android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -30,23 +30,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
         </FrameLayout>
-
-        <!--        <FrameLayout-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="100dp"-->
-        <!--            android:background="@drawable/background_gradient_searchbar"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toTopOf="parent">-->
-
-        <!--            <androidx.appcompat.widget.SearchView-->
-        <!--                android:layout_width="match_parent"-->
-        <!--                android:layout_height="?attr/actionBarSize"-->
-        <!--                app:layout_constraintEnd_toEndOf="parent"-->
-        <!--                app:layout_constraintStart_toStartOf="parent"-->
-        <!--                app:layout_constraintTop_toTopOf="parent"/>-->
-
-        <!--        </FrameLayout>-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listingRecyclerView"

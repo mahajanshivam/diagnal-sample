@@ -42,18 +42,6 @@ class DiagnalListingGridItemViewHolder(
                 binding.ivPoster.setImageDrawable(it)
             }
 
-//        posterDrawable?.let {
-//            binding.ivPoster.setImageDrawable(
-////                posterDrawable
-//
-//
-////            ContextCompat.getDrawable(
-////                binding.root.context,
-////                R.drawable.poster2
-////            )
-//            )
-//        }
-
         binding.tvTitle.text = item.name
 
         binding.clRoot.setOnClickListener {
